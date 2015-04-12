@@ -1,0 +1,30 @@
+{
+  "name": "edimax-martplug",
+  "version": "0.0.1",
+  "description": "Node module to communicate with Edimax Smart Plugs",
+  "author": {
+    "name": "Marcus Wittig",
+    "url": "https://github.com/mwittig/edimax-martplug"
+  },
+  "main": "index",
+  "homepage": "https://github.com/mwittig/edimax-martplug",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mwittig/edimax-smartplug"
+  },
+  "bugs": {
+    "url": "https://github.com/mwittig/edimax-smartplug/issues"
+  },
+  "keywords": [
+    "SmartHome",
+    "SmartPlug",
+    "Edimax"
+  ],
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "lodash": "^3.6.0",
+    "xmldom": "^0.1.19",
+    "xpath": "0.0.9"
+  }
+}
