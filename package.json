@@ -1,13 +1,13 @@
 {
-  "name": "edimax-martplug",
-  "version": "0.0.1",
+  "name": "edimax-smartplug",
+  "version": "0.0.2",
   "description": "Node module to communicate with Edimax Smart Plugs",
   "author": {
     "name": "Marcus Wittig",
-    "url": "https://github.com/mwittig/edimax-martplug"
+    "url": "https://github.com/mwittig/edimax-smartplug"
   },
   "main": "index",
-  "homepage": "https://github.com/mwittig/edimax-martplug",
+  "homepage": "https://github.com/mwittig/edimax-smartplug",
   "license": "MIT",
   "repository": {
     "type": "git",
