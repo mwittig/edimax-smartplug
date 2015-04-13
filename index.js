@@ -9,6 +9,9 @@ var util = require('util'),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
     };
 
+//
+// Private Help Functions
+//
 
 function createCommandString(deviceName, command, commandXml) {
     return util.format(commandTemplateString, deviceName, command, commandXml);
@@ -81,6 +84,10 @@ function postRequest(command, options) {
     });
 }
 
+//
+// Public Functions
+//
+
 module.exports.getSwitchState = function (options) {
     var commandString = createCommandString(options.name, "get", "<Device.System.Power.State/>");
     return lastRequest = Promise.settle([lastRequest]).then(function () {
@@ -130,31 +137,41 @@ module.exports.getSwitchEnergy = function (options) {
     });
 };
 
-module.exports.getAll = function (options) {
-    var commandString = createCommandString(options.name, "get", "<Device.System.Power.State/><NOW_POWER/>");
+module.exports.getStatusValues = function (withMetering, options) {
+    var command = withMetering?"<Device.System.Power.State/><NOW_POWER/>":"<Device.System.Power.State/>",
+        commandString = createCommandString(options.name, "get", command);
 
     return lastRequest = Promise.settle([lastRequest]).then(function () {
         return postRequest(commandString, options).then(function (responseDom) {
-            var toggleTime = xpath.select("//Device.System.Power.LastToggleTime/text()", responseDom).toString(),
-                date = (toggleTime.length === 14) ?
-                    new Date(
-                        toggleTime.substring(0, 4),
-                        parseInt(toggleTime.substring(4, 6)) - 1,
-                        toggleTime.substring(6, 8),
-                        toggleTime.substring(8, 10),
-                        toggleTime.substring(10, 12),
-                        toggleTime.substring(12, 14)
-                    ) : new date();
-
-            return Promise.resolve({
-                lastToggleTime: date,
+            var result = {
                 state: /^ON$/.test(xpath.select("//Device.System.Power.State/text()", responseDom).toString()),
-                nowPower: parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString()),
-                nowCurrent: parseFloat(xpath.select("//Device.System.Power.NowCurrent/text()", responseDom).toString()),
-                day: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Day/text()", responseDom).toString()),
-                week: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Week/text()", responseDom).toString()),
-                month: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Month/text()", responseDom).toString())
-            });
+                nowPower: 0,
+                nowCurrent: 0,
+                day: 0,
+                week: 0,
+                month: 0
+            };
+            if (withMetering) {
+                var toggleTime = xpath.select("//Device.System.Power.LastToggleTime/text()", responseDom).toString(),
+                    date = (toggleTime.length === 14) ?
+                        new Date(
+                            toggleTime.substring(0, 4),
+                            parseInt(toggleTime.substring(4, 6)) - 1,
+                            toggleTime.substring(6, 8),
+                            toggleTime.substring(8, 10),
+                            toggleTime.substring(10, 12),
+                            toggleTime.substring(12, 14)
+                        ) : new date();
+                result = _.assign(result, {
+                    lastToggleTime: date,
+                    nowPower: parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString()),
+                    nowCurrent: parseFloat(xpath.select("//Device.System.Power.NowCurrent/text()", responseDom).toString()),
+                    day: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Day/text()", responseDom).toString()),
+                    week: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Week/text()", responseDom).toString()),
+                    month: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Month/text()", responseDom).toString())
+                })
+            }
+            return Promise.resolve(result);
         })
     });
 };

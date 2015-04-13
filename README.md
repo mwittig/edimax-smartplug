@@ -54,3 +54,6 @@ History
     * Handle chunked response data
     * Added basic implementation to obtain schedule info
     * Updated README
+    
+* 20150413, V0.0.5
+    * Added getStatusValues() method to provide bulk updates optionally including metering values

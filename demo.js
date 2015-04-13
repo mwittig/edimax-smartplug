@@ -26,6 +26,10 @@ smartplug.getSwitchEnergy(options).then(function (energy) {
     console.log(energy);
 }).catch(function(e) {console.log(e)});
 
+smartplug.getStatusValues(true, options).then(function (all) {
+    console.log(all);
+}).catch(function(e) {console.log(e)});
+
 // set switch OFF
 smartplug.setSwitchState(false, options).catch(function(e) {console.log(e)});
 
