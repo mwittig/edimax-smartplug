@@ -1,29 +1,36 @@
-var smartplug = require('./index');
+var smartplug = require('./index'),
+    options = {
+        name:'edimax',
+        host:'192.168.178.65',
+        username: 'admin',
+        password: '1234'
+    },
+    x = Date.now();
 
-var x = Date.now();
-
-smartplug.getDeviceInfo({name:'edimax', host:'192.168.178.65'}).then(function (energy) {
+smartplug.getDeviceInfo(options).then(function (energy) {
     console.log(energy);
 }).catch(function(e) {console.log(e)});
 
-// set switch ON
-smartplug.setSwitchState(true, {name:'edimax', host:'192.168.178.65'}).catch(function(e) {console.log(e)});
+smartplug.getSchedule(options).then(function (schedule) {
+    console.log(schedule);
+}).catch(function(e) {console.log(e)});
 
-smartplug.getSwitchPower({name:'edimax', host:'192.168.178.65'}).then(function (power) {
+// set switch ON
+smartplug.setSwitchState(true, options).catch(function(e) {console.log(e)});
+
+smartplug.getSwitchPower(options).then(function (power) {
     console.log("Current switch power", power, "Watts");
 }).catch(function(e) {console.log(e)});
 
-smartplug.getSwitchEnergy({name:'edimax', host:'192.168.178.65'}).then(function (energy) {
+smartplug.getSwitchEnergy(options).then(function (energy) {
     console.log(energy);
 }).catch(function(e) {console.log(e)});
 
 // set switch OFF
-smartplug.setSwitchState(false, {name:'edimax', host:'192.168.178.65'}).catch(function(e) {console.log(e)});
+smartplug.setSwitchState(false, options).catch(function(e) {console.log(e)});
 
 // get switch status
-smartplug.getSwitchState({name:'edimax', host:'192.168.178.65'}).then(function (state) {
+smartplug.getSwitchState(options).then(function (state) {
     console.log("Switch is", state?"ON":"OFF");
-    console.log(Date.now() - x)
+    console.log(Date.now() - x, "milliseconds ellapsed")
 }).catch(function(e) {console.log(e)});
-
-
