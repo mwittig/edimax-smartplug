@@ -1,7 +1,7 @@
 # edimax-smartplug
 
 Node module to communicate with Edimax Smart Plugs. The library utilizes Bluebird 
-promises - https://github.com/petkaantonov/bluebird. Device request will be executed sequentially. 
+promises - https://github.com/petkaantonov/bluebird. Device requests will be executed sequentially. 
 This is useful as the Smart Plug REST service does not chain incoming requests.
 
 ## Usage Examples
@@ -57,3 +57,6 @@ History
     
 * 20150413, V0.0.5
     * Added getStatusValues() method to provide bulk updates optionally including metering values
+    
+* 20150416, V0.0.6
+    * Fixed bug in which resulted on a TypeError if withMetering was set to false

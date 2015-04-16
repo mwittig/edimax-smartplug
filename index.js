@@ -161,7 +161,7 @@ module.exports.getStatusValues = function (withMetering, options) {
                             toggleTime.substring(8, 10),
                             toggleTime.substring(10, 12),
                             toggleTime.substring(12, 14)
-                        ) : new date();
+                        ) : new Date();
                 result = _.assign(result, {
                     lastToggleTime: date,
                     nowPower: parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString()),
