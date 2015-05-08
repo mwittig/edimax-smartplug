@@ -59,4 +59,8 @@ History
     * Added getStatusValues() method to provide bulk updates optionally including metering values
     
 * 20150416, V0.0.6
-    * Fixed bug in which resulted on a TypeError if withMetering was set to false
+    * Fixed bug in request processing which caused a TypeError if withMetering was set to false
+    
+* 20150508, V0.0.7
+    * Fixed request error handling. Request must be aborted if error has occurred
+    * Added option to set a request timeout
