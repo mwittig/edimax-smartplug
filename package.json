@@ -1,6 +1,6 @@
 {
   "name": "edimax-smartplug",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Node module to communicate with Edimax Smart Plugs",
   "author": {
     "name": "Marcus Wittig",

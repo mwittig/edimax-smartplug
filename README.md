@@ -64,3 +64,6 @@ History
 * 20150508, V0.0.7
     * Fixed request error handling. Request must be aborted if error has occurred
     * Added option to set a request timeout
+    
+* 20150511, V0.0.8
+    * Enforce a default timeout of 20000 msecs to cleanup if client is connected but server does not send a response.

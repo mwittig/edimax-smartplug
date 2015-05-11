@@ -29,7 +29,7 @@ function assignDefaultCommandOptions(options) {
 
 function postRequest(command, options) {
     var requestOptions = _.assign({
-            timeout: 0,
+            timeout: 20000,
             port: 10000,
             path: 'smartplug.cgi',
             method: 'POST',
