@@ -1,6 +1,6 @@
 {
   "name": "edimax-smartplug",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Node module to communicate with Edimax Smart Plugs",
   "author": {
     "name": "Marcus Wittig",
@@ -22,8 +22,8 @@
     "Edimax"
   ],
   "dependencies": {
-    "bluebird": "^2.9.24",
-    "lodash": "^3.8.0",
+    "bluebird": "^3.1.1",
+    "lodash": "^3.10.1",
     "xmldom": "^0.1.19",
     "xpath": "0.0.9"
   }
