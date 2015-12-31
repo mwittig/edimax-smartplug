@@ -67,3 +67,8 @@ History
     
 * 20150511, V0.0.8
     * Enforce a default timeout of 20000 msecs to cleanup if client is connected but server does not send a response.
+
+* 20151231, V0.0.9
+    * Bug fix. Always set SmartPlug id XML-Attribute to "edimax" rather than the name assigned to the plug.
+    * Dependency update
+    * Added basic Travis builds
