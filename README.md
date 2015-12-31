@@ -72,3 +72,6 @@ History
     * Bug fix. Always set SmartPlug id XML-Attribute to "edimax" rather than the name assigned to the plug.
     * Dependency update
     * Added basic Travis builds
+    
+* 20151231, V0.0.10
+    * Added missing commit from previous release
