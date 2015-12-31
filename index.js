@@ -4,7 +4,7 @@ var util = require('util'),
     xpath = require('xpath'),
     xmldom = require('xmldom'),
     Promise = require('bluebird'),
-    commandTemplateString = '<?xml version="1.0" encoding="UTF8"?><SMARTPLUG id="%s"><CMD id="%s">%s</CMD></SMARTPLUG>',
+    commandTemplateString = '<?xml version="1.0" encoding="UTF8"?><SMARTPLUG id="edimax"><CMD id="%s">%s</CMD></SMARTPLUG>',
     lastRequest = Promise.resolve(),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
     };
@@ -14,7 +14,7 @@ var util = require('util'),
 //
 
 function createCommandString(deviceName, command, commandXml) {
-    return util.format(commandTemplateString, deviceName, command, commandXml);
+    return util.format(commandTemplateString, command, commandXml);
 }
 
 function consoleDebug() {
