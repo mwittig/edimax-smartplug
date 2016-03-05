@@ -10,7 +10,7 @@ var util = require('util'),
     };
 
 //
-// Private Help Functions
+// Private Helper Functions
 //
 
 function createCommandString(deviceName, command, commandXml) {
@@ -19,6 +19,10 @@ function createCommandString(deviceName, command, commandXml) {
 
 function consoleDebug() {
     console.log.apply(this, arguments)
+}
+
+function settlePromise(aPromise) {
+    return aPromise.reflect();
 }
 
 function assignDefaultCommandOptions(options) {
@@ -107,7 +111,7 @@ module.exports.getSwitchState = function (options) {
     var commandOptions = assignDefaultCommandOptions(options),
         commandString = createCommandString(commandOptions.name, "get", "<Device.System.Power.State/>");
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             return Promise.resolve(
                 /^ON$/.test(xpath.select("//Device.System.Power.State/text()", responseDom).toString())); // true if on
@@ -120,7 +124,7 @@ module.exports.setSwitchState = function (state, options) {
         command = util.format("<Device.System.Power.State>%s</Device.System.Power.State>", state ? "ON" : "OFF"),
         commandString = createCommandString(commandOptions.name, "setup", command);
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function () {
             return Promise.resolve();
         })
@@ -132,7 +136,7 @@ module.exports.getSwitchPower = function (options) {
         commandString = createCommandString(commandOptions.name, "get",
             "<NOW_POWER><Device.System.Power.NowPower/></NOW_POWER>");
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             return Promise.resolve(
                 parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString())
@@ -146,7 +150,7 @@ module.exports.getSwitchEnergy = function (options) {
         commandString = createCommandString(commandOptions.name, "get",
             "<NOW_POWER><Device.System.Power.NowEnergy.Day/><Device.System.Power.NowEnergy.Week/><Device.System.Power.NowEnergy.Month/></NOW_POWER>");
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             return Promise.resolve({
                 day: parseFloat(xpath.select("//Device.System.Power.NowEnergy.Day/text()", responseDom).toString()),
@@ -162,7 +166,7 @@ module.exports.getStatusValues = function (withMetering, options) {
         command = withMetering ? "<Device.System.Power.State/><NOW_POWER/>" : "<Device.System.Power.State/>",
         commandString = createCommandString(commandOptions.name, "get", command);
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             var result = {
                 state: /^ON$/.test(xpath.select("//Device.System.Power.State/text()", responseDom).toString()),
@@ -202,7 +206,7 @@ module.exports.getSchedule = function (options) {
         commandString = createCommandString(commandOptions.name, "get",
             "<SCHEDULE></SCHEDULE>");
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             var result = {};
             for (var x = 0; x <= 6; ++x) {
@@ -218,7 +222,7 @@ module.exports.getDeviceInfo = function (options) {
         commandString = createCommandString(commandOptions.name, "get",
             "<SYSTEM_INFO><Run.Cus/><Run.Model/><Run.FW.Version/><Run.LAN.Client.MAC.Address/></SYSTEM_INFO>");
 
-    return lastRequest = Promise.settle([lastRequest]).then(function () {
+    return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             return Promise.resolve({
                 vendor: xpath.select("//Run.Cus/text()", responseDom).toString(),

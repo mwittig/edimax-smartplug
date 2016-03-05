@@ -8,8 +8,8 @@ var smartplug = require('./index'),
     },
     x = Date.now();
 
-smartplug.getDeviceInfo(options).then(function (energy) {
-    console.log(energy);
+smartplug.getDeviceInfo(options).then(function (info) {
+    console.log(info);
 }).catch(function(e) {console.log("Request failed: ", e)});
 
 smartplug.getSchedule(options).then(function (schedule) {

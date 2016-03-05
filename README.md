@@ -76,4 +76,9 @@ History
     * Added basic Travis builds
     
 * 20151231, V0.0.10
-    * Added missing commit from previous release
+    * Added missing commit from previous releas
+    
+* 20160305, V0.0.11
+    * Dependency updates
+    * Replaced deprecated use of Promise.settle()
+    * Minor changes of demo.js

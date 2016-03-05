@@ -22,9 +22,9 @@
     "Edimax"
   ],
   "dependencies": {
-    "bluebird": "^3.1.1",
-    "lodash": "^3.10.1",
-    "xmldom": "^0.1.19",
-    "xpath": "0.0.9"
+    "bluebird": "^3.3.3",
+    "lodash": "^4.6.1",
+    "xmldom": "^0.1.22",
+    "xpath": "0.0.22"
   }
 }
