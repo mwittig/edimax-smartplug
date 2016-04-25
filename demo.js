@@ -1,12 +1,13 @@
-var smartplug = require('./index'),
-    options = {
-        timeout: 10000,
-        name:'edimax',
-        host:'192.168.178.65',
-        username: 'admin',
-        password: '1234'
-    },
-    x = Date.now();
+var smartplug = require('./index');
+var options = {
+    timeout: 10000,
+    name:'edimax',
+    host:'192.168.178.65',
+    username: 'admin',
+    password: '1234'
+};
+var x = Date.now();
+
 
 smartplug.getDeviceInfo(options).then(function (info) {
     console.log(info);
@@ -38,4 +39,12 @@ smartplug.setSwitchState(false, options).catch(function(e) {console.log("Request
 smartplug.getSwitchState(options).then(function (state) {
     console.log("Switch is", state?"ON":"OFF");
     console.log(Date.now() - x, "milliseconds ellapsed")
+}).catch(function(e) {console.log("Request failed: ", e)});
+
+// discover devices
+smartplug.discoverDevices({
+    timeout: 3000,
+    address: "255.255.255.255"
+}).then(function (results) {
+    console.log(results);
 }).catch(function(e) {console.log("Request failed: ", e)});

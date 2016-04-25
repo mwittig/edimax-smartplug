@@ -1,9 +1,12 @@
 var util = require('util'),
     http = require('http'),
-    _ = require('lodash'),
+    _assign = require('lodash.assign'),
+    _isUndefined = require('lodash.isundefined'),
+    _parseInt = require('lodash.parseint')
     xpath = require('xpath'),
     xmldom = require('xmldom'),
     Promise = require('bluebird'),
+    dgram = require('dgram'),
     commandTemplateString = '<?xml version="1.0" encoding="UTF8"?><SMARTPLUG id="edimax"><CMD id="%s">%s</CMD></SMARTPLUG>',
     lastRequest = Promise.resolve(),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
@@ -26,13 +29,13 @@ function settlePromise(aPromise) {
 }
 
 function assignDefaultCommandOptions(options) {
-    return _.assign({
+    return _assign({
         name: 'edimax'
     }, options)
 }
 
 function postRequest(command, options) {
-    var requestOptions = _.assign({
+    var requestOptions = _assign({
             timeout: 20000,
             port: 10000,
             path: 'smartplug.cgi',
@@ -70,7 +73,7 @@ function postRequest(command, options) {
                     return reject(error);
                 }
                 var contentLength = response.headers['content-length'];
-                if (_.isUndefined(contentLength) || _.parseInt(contentLength) === 0) {
+                if (_isUndefined(contentLength) || _parseInt(contentLength) === 0) {
                     error = new Error("No such device: check name");
                     debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
                     return reject(error);
@@ -101,6 +104,39 @@ function postRequest(command, options) {
         postReq.write(command);
         postReq.end();
     });
+}
+
+function bufIndexOf(buffer, byteVal, start, end) {
+    var pos = start;
+    for (; pos < end; pos++) {
+        if (buffer[pos] === byteVal) {
+            break;
+        }
+    }
+    return pos;
+}
+
+function bytesToIpAddress(bytes) {
+    if (bytes.length === 4) {
+        return "" + bytes[0] + "." + bytes[1] + "." + bytes[2] + "." + bytes[3];
+    }
+    else {
+        throw new Error("Buffer does not contain valid IPv4 address")
+    }
+}
+
+function toHexString(d) {
+    return ("0"+(Number(d).toString(16))).slice(-2).toUpperCase()
+}
+
+function bytesToMacAddress(bytes) {
+    if (bytes.length === 6) {
+        return "" + toHexString(bytes[0]) + ":" + toHexString(bytes[1]) + ":" + toHexString(bytes[2])
+            + ":" + toHexString(bytes[3]) + ":" + toHexString(bytes[4]) + ":" + toHexString(bytes[5]);
+    }
+    else {
+        throw new Error("Buffer does not contain valid MAC address")
+    }
 }
 
 //
@@ -187,7 +223,7 @@ module.exports.getStatusValues = function (withMetering, options) {
                             toggleTime.substring(10, 12),
                             toggleTime.substring(12, 14)
                         ) : new Date();
-                result = _.assign(result, {
+                result = _assign(result, {
                     lastToggleTime: date,
                     nowPower: parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString()),
                     nowCurrent: parseFloat(xpath.select("//Device.System.Power.NowCurrent/text()", responseDom).toString()),
@@ -231,5 +267,61 @@ module.exports.getDeviceInfo = function (options) {
                 mac: xpath.select("//Run.LAN.Client.MAC.Address/text()", responseDom).toString()
             });
         })
+    });
+};
+
+module.exports.discoverDevices = function (options) {
+    var options = options || {};
+    var port = options.port || 20560;
+    var host = options.address || "255.255.255.255";
+    var timeout = options.timeout || "3000";
+    var discoveryMessage = Buffer([
+        0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0x45, 0x44,
+        0x49, 0x4d, 0x41, 0x58,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0xA1,
+        0xFF, 0x5E
+    ]);
+    var timeoutId = null;
+    var discoResults = [];
+
+    return new Promise(function (resolve, reject) {
+        var discoverer = dgram.createSocket('udp4');
+        discoverer.bind();
+
+        discoverer.on('listening', function () {
+            discoverer.setBroadcast(true);
+
+            discoverer.send(discoveryMessage, 0, discoveryMessage.length, port, host, function(err, bytes) {
+                if (err) throw err;
+                debug('UDP message sent to ' + host +':'+ port);
+            });
+        });
+
+        discoverer.on('message', function (message, remote) {
+            discoResults.push({
+                mac: bytesToMacAddress(message.slice(0, 6)),
+                manufacturer: message.toString('ascii', 6, bufIndexOf(message, 0x00, 6, 18)),
+                model: message.toString('ascii', 22, bufIndexOf(message, 0x00, 22, 36)),
+                version: message.toString('ascii', 36, bufIndexOf(message, 0x00, 36, 44)),
+                displayName: message.toString('ascii', 44, bufIndexOf(message, 0x00, 44, 172)),
+                port: message.readInt16LE(172),
+                addr: bytesToIpAddress(message.slice(174, 178)),
+                dstAddr: bytesToIpAddress(message.slice(182, 186))
+            });
+            timeoutId = setTimeout(function() {
+                discoverer.close();
+                resolve(discoResults);
+            }, timeout)
+        });
+
+        discoverer.on('error', function (message, error) {
+            if (timeoutId !== null) {
+                clearTimeout(timeoutId);
+            }
+            debug(error);
+            reject(error);
+        });
     });
 };
