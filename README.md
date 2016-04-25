@@ -31,54 +31,44 @@ This is useful as the Smart Plug REST service does not chain incoming requests.
         console.log(energy);
     }).catch(function(e) {console.log(e)});
     
+    // discover devices
+    smartplug.discoverDevices({
+        timeout: 3000,
+        address: "255.255.255.255"
+    }).then(function (results) {
+        console.log(results);
+    }).catch(function(e) {console.log("Request failed: ", e)});
     
-TODO
-----
+## New: Device Discovery
+
+The device discovery implementation is based on the findings summarized in a 
+[blog post](http://blog.guntram.de/?p=45) (thanks, Guntram). As the discovery 
+mechanism may also be used for other Edimax products, e.g. IP cameras, you should filter
+by model name to make sure the found device is a smart plug ('SP2101W' and 'SP2101W'). The method `discoverDevices()` 
+accepts the following options:
+
+| Property  | Default           | Type    | Description                                 |
+|:----------|:------------------|:--------|:--------------------------------------------|
+| address   | "255.255.255.255" | String  | The broadcast address                       |
+| timeout   | 3000              | Integer | The timeout in milliseconds for discovery   |
+
+Note: Using the global broadcast address on Windows may yield unexpected results. On Windows, 
+global broadcast packets will only be routed via the first network adapter which may cause problems
+with multi-homed setups and virtual network adapters. If you want to use a broadcast address 
+though, use a network-specific address, e.g. for `192.168.0.1/24` use `192.168.0.255`.
+    
+## TODO
 
 * Documentation
 * Make request chaining optional. In some cases, request/response interleaving does not matter
 * Add tests
 
-History
--------
+## History
 
-* 20150412, V0.0.1
-    * Initial Version
-    
-* 20150412, V0.0.2
-    * Corrected package descriptor
-    
-* 20150413, V0.0.3
-    * Added function to get Energy & Power attributes and to read device information (vendor, model, firmware version)
-    
-* 20150413, V0.0.4
-    * Improved error handling (Unauthorized case, in particular)
-    * Handle chunked response data
-    * Added basic implementation to obtain schedule info
-    * Updated README
-    
-* 20150413, V0.0.5
-    * Added getStatusValues() method to provide bulk updates optionally including metering values
-    
-* 20150416, V0.0.6
-    * Fixed bug in request processing which caused a TypeError if withMetering was set to false
-    
-* 20150508, V0.0.7
-    * Fixed request error handling. Request must be aborted if error has occurred
-    * Added option to set a request timeout
-    
-* 20150511, V0.0.8
-    * Enforce a default timeout of 20000 msecs to cleanup if client is connected but server does not send a response.
+See [Release History](https://github.com/mwittig/edimax-smartplug/blob/master/HISTORY.md).
 
-* 20151231, V0.0.9
-    * Bug fix. Always set SmartPlug id XML-Attribute to "edimax" rather than the name assigned to the plug.
-    * Dependency update
-    * Added basic Travis builds
-    
-* 20151231, V0.0.10
-    * Added missing commit from previous releas
-    
-* 20160305, V0.0.11
-    * Dependency updates
-    * Replaced deprecated use of Promise.settle()
-    * Minor changes of demo.js
+## License 
+
+Copyright (c) 2015-2016, Marcus Wittig and contributors. All rights reserved.
+
+[MIT License](https://github.com/mwittig/edimax-smartplug/blob/master/LICENSE)
