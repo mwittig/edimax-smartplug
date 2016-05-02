@@ -1,5 +1,7 @@
 # Release History
 
+* 20160503, V0.0.13
+    * Fix: ensure discovery service will timeout if no results received
 
 * 20160425, V0.0.12
     * Added device discovery service

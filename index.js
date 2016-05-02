@@ -297,6 +297,11 @@ module.exports.discoverDevices = function (options) {
                 if (err) throw err;
                 debug('UDP message sent to ' + host +':'+ port);
             });
+
+            timeoutId = setTimeout(function() {
+                discoverer.close();
+                resolve(discoResults);
+            }, timeout)
         });
 
         discoverer.on('message', function (message, remote) {
@@ -310,10 +315,6 @@ module.exports.discoverDevices = function (options) {
                 addr: bytesToIpAddress(message.slice(174, 178)),
                 dstAddr: bytesToIpAddress(message.slice(182, 186))
             });
-            timeoutId = setTimeout(function() {
-                discoverer.close();
-                resolve(discoResults);
-            }, timeout)
         });
 
         discoverer.on('error', function (message, error) {
