@@ -291,17 +291,32 @@ module.exports.discoverDevices = function (options) {
         discoverer.bind();
 
         discoverer.on('listening', function () {
-            discoverer.setBroadcast(true);
 
-            discoverer.send(discoveryMessage, 0, discoveryMessage.length, port, host, function(err, bytes) {
-                if (err) throw err;
-                debug('UDP message sent to ' + host +':'+ port);
-            });
+            try {
+                discoverer.setBroadcast(true);
 
-            timeoutId = setTimeout(function() {
-                discoverer.close();
-                resolve(discoResults);
-            }, timeout)
+                if (typeof host !== "string") {
+                    throw new TypeError("invalid arguments: IP address must be a string");
+                }
+                discoverer.send(discoveryMessage, 0, discoveryMessage.length, port, host, function(error, bytes) {
+                    if (error) {
+                        discoverer.emit('error', error);
+                    }
+                    else {
+                        debug('UDP message sent to ' + host +':'+ port);
+
+                        timeoutId = setTimeout(function() {
+                            try {
+                                discoverer.close();
+                            } catch (ex) {/*ignore*/}
+                            resolve(discoResults);
+                        }, timeout)
+                    }
+                });
+            }
+            catch (e) {
+                discoverer.emit('error', e);
+            }
         });
 
         discoverer.on('message', function (message, remote) {
@@ -322,6 +337,9 @@ module.exports.discoverDevices = function (options) {
                 clearTimeout(timeoutId);
             }
             debug(error);
+            try {
+                discoverer.close();
+            } catch (ex) {/*ignore*/}
             reject(error);
         });
     });
