@@ -1,5 +1,9 @@
 # Release History
 
+* 20160503, V0.0.14
+    * Bug fix: Close discovery socket on error
+    * Improved error handling
+    
 * 20160503, V0.0.13
     * Fix: ensure discovery service will timeout if no results received
 
