@@ -6,7 +6,6 @@ var options = {
     username: 'admin',
     password: '1234'
 };
-var x = Date.now();
 
 
 smartplug.getDeviceInfo(options).then(function (info) {
@@ -25,11 +24,11 @@ smartplug.getSwitchPower(options).then(function (power) {
 }).catch(function(e) {console.log("Request failed: ", e)});
 
 smartplug.getSwitchEnergy(options).then(function (energy) {
-    console.log(energy);
+    console.log("getSwitchEnergy result:", energy);
 }).catch(function(e) {console.log("Request failed: ", e)});
 
 smartplug.getStatusValues(true, options).then(function (all) {
-    console.log(all);
+    console.log("getStatusValues result:", all);
 }).catch(function(e) {console.log("Request failed: ", e)});
 
 // set switch OFF
@@ -37,14 +36,18 @@ smartplug.setSwitchState(false, options).catch(function(e) {console.log("Request
 
 // get switch status
 smartplug.getSwitchState(options).then(function (state) {
-    console.log("Switch is", state?"ON":"OFF");
-    console.log(Date.now() - x, "milliseconds ellapsed")
+    console.log("Switch status is", state?"ON":"OFF");
+}).catch(function(e) {console.log("Request failed: ", e)});
+
+// get the daily history of power measured consumption for the given date range
+smartplug.getHistory('DAY', '20160825', '20160830', options).then(function (results) {
+    console.log("getHistory result", results);
 }).catch(function(e) {console.log("Request failed: ", e)});
 
 // discover devices
 smartplug.discoverDevices({
     timeout: 3000,
-    address: "255.255.255.255"
+    address: "192.168.178.255"
 }).then(function (results) {
-    console.log(results);
+    console.log("Discovery Result:", results);
 }).catch(function(e) {console.log("Request failed: ", e)});
