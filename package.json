@@ -6,6 +6,11 @@
     "name": "Marcus Wittig",
     "url": "https://github.com/mwittig/edimax-smartplug"
   },
+  "contributors": {
+    "name" : "Matt Galloway",
+    "email" : "matt@galloway.me.uk",
+    "url" : "http://www.galloway.me.uk/"
+  },
   "main": "index",
   "homepage": "https://github.com/mwittig/edimax-smartplug",
   "license": "MIT",
@@ -22,10 +27,10 @@
     "Edimax"
   ],
   "dependencies": {
-    "bluebird": "^3.3.5",
-    "lodash.assign": "^4.0.8",
+    "bluebird": "^3.4.5",
+    "lodash.assign": "^4.2.0",
     "lodash.isundefined": "^3.0.1",
-    "lodash.parseint": "^4.0.1",
+    "lodash.parseint": "^4.0.2",
     "xmldom": "^0.1.22",
     "xpath": "0.0.23"
   }
