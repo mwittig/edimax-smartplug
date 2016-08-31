@@ -161,7 +161,7 @@ function decodeHistoryValue(value) {
             return 63
         }
         throw new Error("Invalid character code: " + charCode + "(" + String.fromCharCode(charCode) + ")");
-    }
+    };
 
     var result = 0;
     for (var i = 0; i < value.length; i++) {
@@ -320,7 +320,7 @@ module.exports.getHistory = function (unit, startDate, endDate, options) {
             return Promise.resolve(decodedResultsArray);
         })
     });
-}
+};
 
 module.exports.discoverDevices = function (options) {
     var options = options || {};
