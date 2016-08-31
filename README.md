@@ -98,7 +98,7 @@ an object with the following properties:
 | version       | String  | '2.03'           | The firmware version           |
 | displayName   | String  | 'edimax'         | The assigned device name       |
 | addr          | String  | '192.168.178.65' | The IP address of the device   |
-| dstAddr       | String  | '192.168.178.1'  | The firmware version           |
+| dstAddr       | String  | '192.168.178.1'  | The IP address of the gateway  |
     
 ## TODO
 
