@@ -1,5 +1,10 @@
 # Release History
 
+* 20160831, V0.0.15
+    * Feature: Added method to access history data (contributed by @mattjgalloway)
+    * Updated README and demo.js
+    * Dependency updates
+    
 * 20160503, V0.0.14
     * Bug fix: Close discovery socket on error
     * Improved error handling
