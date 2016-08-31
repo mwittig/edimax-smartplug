@@ -4,11 +4,12 @@
 
 Node module to communicate with Edimax Smart Plugs. The library utilizes Bluebird 
 promises - https://github.com/petkaantonov/bluebird. Device requests will be executed sequentially. 
-This is useful as the Smart Plug REST service does not chain incoming requests. It provides the following features:
+This is useful as the Smart Plug REST service does not properly chain incoming requests. It provides the 
+following features:
 
-* Device Discovery - Smart Plugs can be automatically discovery on a given network 
+* Device Discovery - Smart Plugs can be automatically discovered on a given network 
   (see section "Device Discovery" below for details)
-* Switching - Apart from switching Smart Plugs on and off it is possible to read the current switch state 
+* Switching - Apart from switching Smart Plugs on and off, it is possible to read the current switch state 
 * Usage Metering - For 'SP2101W' Smart Plugs it is possible to access the current, accumulated, and historical
   energy usage metering data 
 
@@ -87,7 +88,7 @@ global broadcast packets will only be routed via the first network adapter which
 with multi-homed setups and virtual network adapters. If you want to use a broadcast address 
 though, use a network-specific address, e.g. for `192.168.0.1/24` use `192.168.0.255`.
 
-A discovery requests returns a promise which yields an array with the discovery items on completion. An item is 
+A discovery request returns a promise which yields an array with the discovery items on completion. An item is 
 an object with the following properties:
 
 | Property      | Type    | Example          | Description                    |
