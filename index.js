@@ -139,6 +139,40 @@ function bytesToMacAddress(bytes) {
     }
 }
 
+function decodeHistoryValue(value) {
+    if (value == '=') {
+        return 0;
+    }
+    
+    var numberFromCharCode = function(charCode) {
+        if (charCode >= '0'.charCodeAt(0) && charCode <= '9'.charCodeAt(0)) {
+            return charCode - '0'.charCodeAt(0)
+        }
+        if (charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0)) {
+            return charCode - 'a'.charCodeAt(0) + 10
+        }
+        if (charCode >= 'A'.charCodeAt(0) && charCode <= 'Z'.charCodeAt(0)) {
+            return charCode - 'A'.charCodeAt(0) + 36
+        }
+        if (charCode == '+'.charCodeAt(0)) {
+            return 62
+        }
+        if (charCode == '/'.charCodeAt(0)) {
+            return 63
+        }
+        throw new Error("Invalid character code: " + charCode + "(" + String.fromCharCode(charCode) + ")");
+    }
+
+    var result = 0;
+    for (var i = 0; i < value.length; i++) {
+        var thisChar = value.charCodeAt(value.length - i - 1);
+        var thisNumber = numberFromCharCode(thisChar);
+        result += thisNumber * (Math.pow(64, i)) 
+    }
+    
+    return result / 1000;
+}
+
 //
 // Public Functions
 //
@@ -269,6 +303,24 @@ module.exports.getDeviceInfo = function (options) {
         })
     });
 };
+
+module.exports.getHistory = function (unit, startDate, endDate, options) {
+    var commandOptions = assignDefaultCommandOptions(options),
+        commandString = createCommandString(commandOptions.name, "get",
+            util.format("<POWER_HISTORY><Device.System.Power.History.Energy unit=\"%s\" date=\"%s-%s\"/></POWER_HISTORY>", unit, startDate, endDate));
+
+    return lastRequest = settlePromise(lastRequest).then(function () {
+        return postRequest(commandString, commandOptions).then(function (responseDom) {
+            var results = xpath.select("//Device.System.Power.History.Energy/text()", responseDom).toString();
+            var resultsArray = results.split('-');
+            var decodedResultsArray = [];
+            for (i = 0; i < resultsArray.length; i++) {
+                decodedResultsArray.push(decodeHistoryValue(resultsArray[i]));
+            }
+            return Promise.resolve(decodedResultsArray);
+        })
+    });
+}
 
 module.exports.discoverDevices = function (options) {
     var options = options || {};
