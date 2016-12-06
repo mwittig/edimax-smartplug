@@ -1,5 +1,10 @@
 # Release History
 
+* 20161207, V0.0.16
+    * Dependency updates
+    * Revised README
+    * Updated Travis build descriptor
+    
 * 20160831, V0.0.15
     * Feature: Added method to access history data (contributed by @mattjgalloway)
     * Updated README and demo.js
