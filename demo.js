@@ -39,6 +39,11 @@ smartplug.getSwitchState(options).then(function (state) {
     console.log("Switch status is", state?"ON":"OFF");
 }).catch(function(e) {console.log("Request failed: ", e)});
 
+// get schedule status
+smartplug.getScheduleState(options).then(function (state) {
+    console.log("Schedule status is", state?"ON":"OFF");
+}).catch(function(e) {console.log("Request failed: ", e)});
+
 // get the daily history of power measured consumption for the given date range
 smartplug.getHistory('DAY', '20160825', '20160830', options).then(function (results) {
     console.log("getHistory result", results);
