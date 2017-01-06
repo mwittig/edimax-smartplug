@@ -10,7 +10,6 @@ following features:
 * Device Discovery - Smart Plugs can be automatically discovered on a given network 
   (see section "Device Discovery" below for details)
 * Switching - Apart from switching Smart Plugs on and off, it is possible to read the current switch state 
-* Schedule - It is not possible to set the schedule for the Smart Plugs, but the current schedule is readable 
 * Usage Metering - For 'SP2101W' Smart Plugs it is possible to access the current, accumulated, and historical
   energy usage metering data 
 
@@ -56,11 +55,6 @@ following features:
     // get switch status
     smartplug.getSwitchState(options).then(function (state) {
         console.log("Switch status is", state?"ON":"OFF");
-    }).catch(function(e) {console.log("Request failed: ", e)});
-
-    // get schedule status
-    smartplug.getScheduleState(options).then(function (state) {
-        console.log("Schedule status is", state?"ON":"OFF");
     }).catch(function(e) {console.log("Request failed: ", e)});
     
     // get the daily history of power measured consumption for the given date range

@@ -139,73 +139,43 @@ function bytesToMacAddress(bytes) {
     }
 }
 
-function numberFromCharCode(charCode) {
-    if (charCode >= '0'.charCodeAt(0) && charCode <= '9'.charCodeAt(0)) {
-        return charCode - '0'.charCodeAt(0)
-    }
-    if (charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0)) {
-        return charCode - 'a'.charCodeAt(0) + 10
-    }
-    if (charCode >= 'A'.charCodeAt(0) && charCode <= 'Z'.charCodeAt(0)) {
-        return charCode - 'A'.charCodeAt(0) + 36
-    }
-    if (charCode == '+'.charCodeAt(0)) {
-        return 62
-    }
-    if (charCode == '/'.charCodeAt(0)) {
-        return 63
-    }
-    throw new Error("Invalid character code: " + charCode + "(" + String.fromCharCode(charCode) + ")");
-}
-
 function decodeHistoryValue(value) {
-    var result = 0;
-
     if (value == '=') {
         return 0;
     }
+    
+    var numberFromCharCode = function(charCode) {
+        if (charCode >= '0'.charCodeAt(0) && charCode <= '9'.charCodeAt(0)) {
+            return charCode - '0'.charCodeAt(0)
+        }
+        if (charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0)) {
+            return charCode - 'a'.charCodeAt(0) + 10
+        }
+        if (charCode >= 'A'.charCodeAt(0) && charCode <= 'Z'.charCodeAt(0)) {
+            return charCode - 'A'.charCodeAt(0) + 36
+        }
+        if (charCode == '+'.charCodeAt(0)) {
+            return 62
+        }
+        if (charCode == '/'.charCodeAt(0)) {
+            return 63
+        }
+        throw new Error("Invalid character code: " + charCode + "(" + String.fromCharCode(charCode) + ")");
+    };
 
+    var result = 0;
     for (var i = 0; i < value.length; i++) {
         var thisChar = value.charCodeAt(value.length - i - 1);
         var thisNumber = numberFromCharCode(thisChar);
         result += thisNumber * (Math.pow(64, i)) 
     }
-
+    
     return result / 1000;
-}
-
-function decodeScheduleActive(schedule) {
-    var date = new Date();
-    var full_min = date.getMinutes() + date.getHours() * 60;
-    var start_min = 0;
-    var end_min = 0;
-    var day_of_week = date.getDay();
-    var daily_schedule = schedule[day_of_week];
-    var sched_items = daily_schedule.split('-');
-    var result = false;
-    for(var i = 0; i < sched_items.length && result != true; i++) {
-       	if(sched_items[i].endsWith('1')) {
-            start_min = numberFromCharCode(sched_items[i].charCodeAt(0)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(1));
-	    end_min = numberFromCharCode(sched_items[i].charCodeAt(2)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(3));
-	    if(full_min >= start_min && full_min <= end_min) {
-                result = true;
-            } else {
-               result = false;
-            }
-	}
-    }
-    return result;
 }
 
 //
 // Public Functions
 //
-
-module.exports.getScheduleState = function (options) {
-    return this.getSchedule(options).then(function (schedule) {
-	return Promise.resolve(decodeScheduleActive(schedule));
-    });
-}
 
 module.exports.getSwitchState = function (options) {
     var commandOptions = assignDefaultCommandOptions(options),
@@ -263,27 +233,19 @@ module.exports.getSwitchEnergy = function (options) {
 
 module.exports.getStatusValues = function (withMetering, options) {
     var commandOptions = assignDefaultCommandOptions(options),
-        command = withMetering ? "<Device.System.Power.State/><SCHEDULE/><NOW_POWER/>" : "<Device.System.Power.State/><SCHEDULE/>",
+        command = withMetering ? "<Device.System.Power.State/><NOW_POWER/>" : "<Device.System.Power.State/>",
         commandString = createCommandString(commandOptions.name, "get", command);
 
     return lastRequest = settlePromise(lastRequest).then(function () {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             var result = {
                 state: /^ON$/.test(xpath.select("//Device.System.Power.State/text()", responseDom).toString()),
-                scheduleState: false,
                 nowPower: 0,
                 nowCurrent: 0,
                 day: 0,
                 week: 0,
                 month: 0
             };
-            var schedule = {};
-            for (var x = 0; x <= 6; ++x) {
-                schedule[x] = xpath.select("//Device.System.Power.Schedule." + x + ".List/text()", responseDom).toString()
-            }
-            result = _assign(result, {
-                scheduleState: decodeScheduleActive(schedule)
-            })
             if (withMetering) {
                 var toggleTime = xpath.select("//Device.System.Power.LastToggleTime/text()", responseDom).toString(),
                     date = (toggleTime.length === 14) ?
@@ -318,6 +280,7 @@ module.exports.getSchedule = function (options) {
         return postRequest(commandString, commandOptions).then(function (responseDom) {
             var result = {};
             for (var x = 0; x <= 6; ++x) {
+		console.log(xpath.select("//Device.System.Power.Schedule." + x + ".List/text()", responseDom));
                 result[x] = xpath.select("//Device.System.Power.Schedule." + x + ".List/text()", responseDom).toString()
             }
             return Promise.resolve(result);
