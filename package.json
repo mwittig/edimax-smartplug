@@ -6,11 +6,17 @@
     "name": "Marcus Wittig",
     "url": "https://github.com/mwittig/edimax-smartplug"
   },
-  "contributors": {
-    "name" : "Matt Galloway",
-    "email" : "matt@galloway.me.uk",
-    "url" : "http://www.galloway.me.uk/"
-  },
+  "contributors": [
+    {
+      "name" : "Markus Plessing",
+      "url" : "https://github.com/mplessing"
+    },
+    {
+      "name" : "Matt Galloway",
+      "email" : "matt@galloway.me.uk",
+      "url" : "http://www.galloway.me.uk/"
+    }
+  ],
   "main": "index",
   "homepage": "https://github.com/mwittig/edimax-smartplug",
   "license": "MIT",
@@ -24,10 +30,11 @@
   "keywords": [
     "SmartHome",
     "SmartPlug",
-    "Edimax"
+    "Edimax",
+    "Metering"
   ],
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bluebird": "^3.4.7",
     "lodash.assign": "^4.2.0",
     "lodash.isundefined": "^3.0.1",
     "lodash.parseint": "^4.0.2",
