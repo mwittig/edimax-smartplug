@@ -1,5 +1,9 @@
 # Release History
 
+* 20170118, V0.0.17
+    * Feature: Added method to get the current schedule state (contributed by @mplessing)
+    * Dependency updates
+    
 * 20161207, V0.0.16
     * Dependency updates
     * Revised README
