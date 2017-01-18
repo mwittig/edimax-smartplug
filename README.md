@@ -118,6 +118,6 @@ See [Release History](https://github.com/mwittig/edimax-smartplug/blob/master/HI
 
 ## License 
 
-Copyright (c) 2015-2016, Marcus Wittig and contributors. All rights reserved.
+Copyright (c) 2015-2017, Marcus Wittig and contributors. All rights reserved.
 
 [MIT License](https://github.com/mwittig/edimax-smartplug/blob/master/LICENSE)
