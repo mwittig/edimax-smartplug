@@ -1,5 +1,10 @@
 # Release History
 
+* 20170029, V0.0.18
+    * Added support for digest authentication required with firmware versions SP-2101W v2.08 and SP-1101W v2.04
+    * Integrated modified version of http-digest-auth with fallback to basic authentication to
+      support older firmware versions
+
 * 20170118, V0.0.17
     * Feature: Added method to get the current schedule state (contributed by @mplessing)
     * Dependency updates

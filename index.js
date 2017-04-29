@@ -1,8 +1,8 @@
 var util = require('util'),
-    http = require('http'),
+    http = require('http-digest-client'),
     _assign = require('lodash.assign'),
     _isUndefined = require('lodash.isundefined'),
-    _parseInt = require('lodash.parseint')
+    _parseInt = require('lodash.parseint');
     xpath = require('xpath'),
     xmldom = require('xmldom'),
     Promise = require('bluebird'),
@@ -49,57 +49,57 @@ function postRequest(command, options) {
         }, options),
         timeoutOccurred = false;
 
-    requestOptions.headers['Authorization'] =
-        "Basic " + new Buffer(requestOptions.username + ":" + requestOptions.password).toString("base64");
-
     debug('REQUEST OPTIONS: ' + JSON.stringify(requestOptions));
     debug('REQUEST: ' + command);
 
     return new Promise(function (resolve, reject) {
-        var data = "",
-            postReq = http.request(requestOptions, function (response) {
-                debug('STATUS: ' + response.statusCode);
-                debug('HEADERS: ' + JSON.stringify(response.headers));
+        var data = "";
+        var client = http(requestOptions.username, requestOptions.password);
+        var postReq = client.request(requestOptions, function (response) {
+            debug('STATUS: ' + response.statusCode);
+            debug('HEADERS: ' + JSON.stringify(response.headers));
 
-                var error;
-                if (response.statusCode >= 300) {
-                    if (response.statusCode === 401) {
-                        error = new Error("Unauthorized: check username/password");
-                    }
-                    else {
-                        error = new Error("Request failed. HTTP Status Code: " + response.statusCode);
-                    }
-                    debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
-                    return reject(error);
+            var error;
+            if (response.statusCode >= 300) {
+                if (response.statusCode === 401) {
+                    error = new Error("Unauthorized: check username/password");
                 }
-                var contentLength = response.headers['content-length'];
-                if (_isUndefined(contentLength) || _parseInt(contentLength) === 0) {
-                    error = new Error("No such device: check name");
-                    debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
-                    return reject(error);
-                }
-
-                response.setEncoding('utf8');
-                response.on('data', function (result) {
-                    debug("DATA CHUNK", result);
-                    data += result;
-                });
-                response.on('end', function () {
-                    debug("END");
-                    var doc = new xmldom.DOMParser().parseFromString(data, 'text/xml');
-                    return resolve(doc);
-                });
-            }).on('error', function (error) {
-                if (timeoutOccurred) {
-                    error = new Error("Request timeout occurred - request aborted");
+                else {
+                    error = new Error("Request failed. HTTP Status Code: " + response.statusCode);
                 }
                 debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
-                postReq.abort();
                 return reject(error);
-            }).on('timeout', function () {
-                timeoutOccurred = true;
-                postReq.abort();
+            }
+            var contentLength = response.headers['content-length'];
+            if (_isUndefined(contentLength) || _parseInt(contentLength) === 0) {
+                error = new Error("No such device: check name");
+                debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
+                return reject(error);
+            }
+
+            response.setEncoding('utf8');
+            response.on('data', function (result) {
+                debug("DATA CHUNK", result);
+                data += result;
             });
+            response.on('end', function () {
+                debug("END");
+                var doc = new xmldom.DOMParser().parseFromString(data, 'text/xml');
+                return resolve(doc);
+            });
+        });
+        postReq.on('error', function (error) {
+            if (timeoutOccurred) {
+                error = new Error("Request timeout occurred - request aborted");
+            }
+            debug('ERROR:' + 'Host ' + requestOptions.host + ' ' + error);
+            postReq.abort();
+            return reject(error);
+        });
+        postReq.on('timeout', function () {
+            timeoutOccurred = true;
+            postReq.abort();
+        });
         postReq.setTimeout(requestOptions.timeout);
         postReq.write(command);
         postReq.end();
@@ -168,7 +168,7 @@ function decodeHistoryValue(value) {
     for (var i = 0; i < value.length; i++) {
         var thisChar = value.charCodeAt(value.length - i - 1);
         var thisNumber = numberFromCharCode(thisChar);
-        result += thisNumber * (Math.pow(64, i)) 
+        result += thisNumber * (Math.pow(64, i))
     }
 
     return result / 1000;
@@ -183,15 +183,11 @@ function decodeScheduleActive(schedule) {
     var daily_schedule = schedule[day_of_week];
     var sched_items = daily_schedule.split('-');
     var result = false;
-    for(var i = 0; i < sched_items.length && result != true; i++) {
-       	if(sched_items[i].endsWith('1')) {
+    for (var i = 0; i < sched_items.length && result != true; i++) {
+       	if (sched_items[i].endsWith('1')) {
             start_min = numberFromCharCode(sched_items[i].charCodeAt(0)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(1));
             end_min = numberFromCharCode(sched_items[i].charCodeAt(2)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(3));
-            if(full_min >= start_min && full_min <= end_min) {
-                result = true;
-            } else {
-               result = false;
-            }
+            result = (full_min >= start_min && full_min <= end_min)
         }
     }
     return result;
@@ -203,9 +199,9 @@ function decodeScheduleActive(schedule) {
 
 module.exports.getScheduleState = function (options) {
     return this.getSchedule(options).then(function (schedule) {
-	return Promise.resolve(decodeScheduleActive(schedule));
+	      return Promise.resolve(decodeScheduleActive(schedule));
     });
-}
+};
 
 module.exports.getSwitchState = function (options) {
     var commandOptions = assignDefaultCommandOptions(options),
@@ -283,7 +279,7 @@ module.exports.getStatusValues = function (withMetering, options) {
             }
             result = _assign(result, {
                 scheduleState: decodeScheduleActive(schedule)
-            })
+            });
             if (withMetering) {
                 var toggleTime = xpath.select("//Device.System.Power.LastToggleTime/text()", responseDom).toString(),
                     date = (toggleTime.length === 14) ?

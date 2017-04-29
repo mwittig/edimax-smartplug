@@ -12,7 +12,8 @@ following features:
 * Switching - Apart from switching Smart Plugs on and off, it is possible to read the current switch state 
 * Schedule - It is not possible to set the schedule for the Smart Plugs, but the current schedule is readable 
 * Usage Metering - For 'SP2101W' Smart Plugs it is possible to access the current, accumulated, and historical
-  energy usage metering data 
+  energy usage metering data
+* Support for digest authentication required with firmware versions SP-2101W v2.08 and SP-1101W v2.04
 
 
 ## Usage Examples
