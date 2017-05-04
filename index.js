@@ -1,6 +1,5 @@
 var util = require('util'),
     http = require('http-digest-client'),
-    _assign = require('lodash.assign'),
     _isUndefined = require('lodash.isundefined'),
     _parseInt = require('lodash.parseint');
     xpath = require('xpath'),
@@ -12,6 +11,8 @@ var util = require('util'),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
     },
     agent = new require('http').Agent({ keepAlive: false });
+
+require('es6-object-assign/auto');
 
 //
 // Private Helper Functions
@@ -30,13 +31,13 @@ function settlePromise(aPromise) {
 }
 
 function assignDefaultCommandOptions(options) {
-    return _assign({
+    return Object.assign({}, {
         name: 'edimax'
     }, options)
 }
 
 function postRequest(command, options) {
-    var requestOptions = _assign({
+    var requestOptions = Object.assign({}, {
             timeout: 20000,
             port: 10000,
             path: 'smartplug.cgi',
@@ -51,7 +52,7 @@ function postRequest(command, options) {
         }, options),
         timeoutOccurred = false;
 
-    debug('REQUEST OPTIONS: ' + JSON.stringify(requestOptions));
+    debug('REQUEST OPTIONS: ' + util.inspect(requestOptions));
     debug('REQUEST: ' + command);
 
     return new Promise(function (resolve, reject) {
@@ -59,7 +60,7 @@ function postRequest(command, options) {
         var client = http(requestOptions.username, requestOptions.password);
         var postReq = client.request(requestOptions, function (response) {
             debug('STATUS: ' + response.statusCode);
-            debug('HEADERS: ' + JSON.stringify(response.headers));
+            debug('HEADERS: ' + util.inspect(response.headers));
 
             var error;
             if (response.statusCode >= 300) {
@@ -185,7 +186,7 @@ function decodeScheduleActive(schedule) {
     var daily_schedule = schedule[day_of_week];
     var sched_items = daily_schedule.split('-');
     var result = false;
-    for (var i = 0; i < sched_items.length && result != true; i++) {
+    for (var i = 0; i < sched_items.length && result !== true; i++) {
        	if (sched_items[i].endsWith('1')) {
             start_min = numberFromCharCode(sched_items[i].charCodeAt(0)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(1));
             end_min = numberFromCharCode(sched_items[i].charCodeAt(2)) * 60 + numberFromCharCode(sched_items[i].charCodeAt(3));
@@ -279,7 +280,7 @@ module.exports.getStatusValues = function (withMetering, options) {
             for (var x = 0; x <= 6; ++x) {
                 schedule[x] = xpath.select("//Device.System.Power.Schedule." + x + ".List/text()", responseDom).toString()
             }
-            result = _assign(result, {
+            result = Object.assign(result, {
                 scheduleState: decodeScheduleActive(schedule)
             });
             if (withMetering) {
@@ -293,7 +294,7 @@ module.exports.getStatusValues = function (withMetering, options) {
                             toggleTime.substring(10, 12),
                             toggleTime.substring(12, 14)
                         ) : new Date();
-                result = _assign(result, {
+                result = Object.assign(result, {
                     lastToggleTime: date,
                     nowPower: parseFloat(xpath.select("//Device.System.Power.NowPower/text()", responseDom).toString()),
                     nowCurrent: parseFloat(xpath.select("//Device.System.Power.NowCurrent/text()", responseDom).toString()),
