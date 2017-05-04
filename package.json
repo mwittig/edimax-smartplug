@@ -35,11 +35,11 @@
   ],
   "dependencies": {
     "bluebird": "^3.4.7",
+    "es6-object-assign": "^1.1.0",
     "http-digest-client": "git+https://github.com/mwittig/node-http-digest-client.git#b8551fe1a27e364d87b90f6a22117232f7683f71",
-    "lodash.assign": "^4.2.0",
     "lodash.isundefined": "^3.0.1",
     "lodash.parseint": "^4.0.2",
     "xmldom": "^0.1.27",
-    "xpath": "0.0.23"
+    "xpath": "0.0.24"
   }
 }
