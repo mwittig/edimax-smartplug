@@ -1,7 +1,13 @@
 # Release History
 
+* 20170404, V0.0.19
+    * Feature: Added a private HTTP connection agent as using the global agent may have undesirable side effects
+      in application with multiple connection targets
+    * Fix: Use util.inspect instead of JSON.stringify to avoid circular dependencies error if debugging is enabled
+    * Updated and revised dependencies. Now using Object.assign instead of lodash assign
+
 * 20170029, V0.0.18
-    * Added support for digest authentication required with firmware versions SP-2101W v2.08 and SP-1101W v2.04
+    * Feature: Added support for digest authentication required with firmware versions SP-2101W v2.08 and SP-1101W v2.04
     * Integrated modified version of http-digest-auth with fallback to basic authentication to
       support older firmware versions
 
