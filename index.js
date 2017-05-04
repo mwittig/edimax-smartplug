@@ -10,7 +10,8 @@ var util = require('util'),
     commandTemplateString = '<?xml version="1.0" encoding="UTF8"?><SMARTPLUG id="edimax"><CMD id="%s">%s</CMD></SMARTPLUG>',
     lastRequest = Promise.resolve(),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
-    };
+    },
+    agent = new require('http').Agent({ keepAlive: false });
 
 //
 // Private Helper Functions
@@ -45,7 +46,8 @@ function postRequest(command, options) {
                 'Content-Length': command.length
             },
             username: 'admin',
-            password: '1234'
+            password: '1234',
+            agent: agent
         }, options),
         timeoutOccurred = false;
 
