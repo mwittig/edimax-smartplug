@@ -1,7 +1,7 @@
 var util = require('util'),
     http = require('http-digest-client'),
     _isUndefined = require('lodash.isundefined'),
-    _parseInt = require('lodash.parseint');
+    _parseInt = require('lodash.parseint'),
     xpath = require('xpath'),
     xmldom = require('xmldom'),
     Promise = require('bluebird'),
