@@ -1,8 +1,6 @@
 # edimax-smartplug
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/mwittig/edimax-smartplug.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/mwittig/edimax-smartplug.svg)](https://travis-ci.org/mwittig/edimax-smartplug)
+[![Greenkeeper badge](https://badges.greenkeeper.io/mwittig/edimax-smartplug.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/mwittig/edimax-smartplug.svg)](https://travis-ci.org/mwittig/edimax-smartplug)
 
 Node module to communicate with Edimax Smart Plugs. The library utilizes Bluebird 
 promises - https://github.com/petkaantonov/bluebird. Device requests will be executed sequentially. 
