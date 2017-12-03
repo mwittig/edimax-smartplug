@@ -1,5 +1,8 @@
 # Release History
 
+* 20171204, V0.0.21
+    * Dependency updates
+
 * 20170514, V0.0.20
     Fix: Syntax Error. Misplaced semicolon result in globals
     
