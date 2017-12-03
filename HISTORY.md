@@ -4,7 +4,7 @@
     * Dependency updates
 
 * 20170514, V0.0.20
-    Fix: Syntax Error. Misplaced semicolon result in globals
+    * Fix: Syntax Error. Misplaced semicolon result in globals
     
 * 20170404, V0.0.19
     * Feature: Added a private HTTP connection agent as using the global agent may have undesirable side effects
