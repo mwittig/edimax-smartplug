@@ -40,6 +40,6 @@
     "lodash.isundefined": "^3.0.1",
     "lodash.parseint": "^4.0.2",
     "xmldom": "^0.1.27",
-    "xpath": "0.0.26"
+    "xpath": "0.0.27"
   }
 }
