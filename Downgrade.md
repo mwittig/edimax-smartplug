@@ -27,9 +27,11 @@ Connect to the WiFi network exhibited by the SmartPlug. The network is named "Ed
 
 ## Upload and Install Firmware
 
-* Open the the following URL in your web browser: http://192.168.20.3:10000/tnupgrade.html
+* Open the the following URL in your web browser: <http://192.168.20.3:10000/tnupgrade.html>. You will prompted for 
+  an username and password which should be set to the factory defaults (`admin` / `1234`).
 
-* When the web page is opened push the button to select the firmware to upload. 
+* When the web page is opened push the button to select the firmware file and then press "Apply" to upload. 
+  Be patient as the upload and burn procedure takes about 2 minutes.
 
 * When the firmware has been successfully uploaded, reset the SmartPlug gain to Factory Settings as described above.
 
