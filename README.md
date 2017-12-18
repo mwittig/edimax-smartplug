@@ -15,6 +15,16 @@ following features:
   energy usage metering data
 * Support for digest authentication required with firmware versions SP-2101W v2.08 and SP-1101W v2.04
 
+| Important Notice |
+|------------------|
+The recent firmware versions published for EdiSmart/Amazon Alexa Integration 
+are currently *not supported* by edimax-smartplug:
+* SP2101W: v2.09 and higher
+* SP1101W: v1.05 and higher
+
+If you have installed the new version and wish to downgrade you can use the 
+[downgrade guide](https://github.com/mwittig/edimax-smartplug/blob/master/Downgrade.md) provided 
+as part of the project.
 
 ## Usage Examples
 
@@ -82,8 +92,8 @@ following features:
 The device discovery implementation is based on the findings summarized in a 
 [blog post](http://blog.guntram.de/?p=45) (thanks, Guntram). As the discovery 
 mechanism may also be used for other Edimax products, e.g. IP cameras, you should filter
-by model name to make sure the found device is a smart plug ('SP2101W' and 'SP2101W'). The method `discoverDevices()` 
-accepts the following options:
+by model name to make sure the found device is a smart plug ('SP1101W' and 'SP2101W'). 
+The method `discoverDevices()` accepts the following options:
 
 | Property  | Default           | Type    | Description                                 |
 |:----------|:------------------|:--------|:--------------------------------------------|
