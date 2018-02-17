@@ -34,7 +34,7 @@
     "Metering"
   ],
   "dependencies": {
-    "bluebird": "^3.4.7",
+    "bluebird": "^3.5.1",
     "es6-object-assign": "^1.1.0",
     "http-digest-client": "git+https://github.com/mwittig/node-http-digest-client.git#b8551fe1a27e364d87b90f6a22117232f7683f71",
     "lodash.isundefined": "^3.0.1",
