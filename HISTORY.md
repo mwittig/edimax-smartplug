@@ -1,5 +1,15 @@
 # Release History
 
+* 20170218, V0.0.23
+    * Dependency updates
+    * Revised Firmware Downgrade Guide and Copyright Notice
+    
+* 20171218, V0.0.22
+    * Dependency updates
+    * Updated Travis build descriptor
+    * Revised README, added incompatibility notice
+    * Added Firmware Downgrade Guide
+    
 * 20171204, V0.0.21
     * Dependency updates
 
