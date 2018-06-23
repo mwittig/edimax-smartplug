@@ -1,5 +1,8 @@
 # Release History
 
+* Unreleased
+    * Added node v10 build to travis build regime
+    
 * 20170218, V0.0.23
     * Dependency updates
     * Revised Firmware Downgrade Guide and Copyright Notice
