@@ -10,7 +10,8 @@ var util = require('util'),
     lastRequest = Promise.resolve(),
     debug = process.env.hasOwnProperty('EDIMAX_DEBUG') ? consoleDebug : function () {
     },
-    agent = new require('http').Agent({ keepAlive: false });
+    nodeHttp = require('http')
+var agent = new nodeHttp.Agent({ keepAlive: false });
 
 require('es6-object-assign/auto');
 
