@@ -1,7 +1,10 @@
 # Release History
 
-* Unreleased
+* 20190328, V0.0.24
     * Added node v10 build to travis build regime
+    * Added note about unsupported SP-2101W V2, issue #14
+    * Dependency updates
+    * Revised Copyright Notice
     
 * 20170218, V0.0.23
     * Dependency updates
