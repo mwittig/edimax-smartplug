@@ -22,6 +22,10 @@ are currently *not supported* by edimax-smartplug:
 * SP2101W: v2.09 and higher
 * SP1101W: v1.05 and higher
 
+Moreover, please note, the SP-2101W V2 plug is currently not supported. 
+ [Issue #14](https://github.com/mwittig/edimax-smartplug/issues/14) contains a link thread with 
+ untested and unsupported downgrade instructions. Use at your own risk!
+
 If you have installed the new version and wish to downgrade you can use the 
 [downgrade guide](https://github.com/mwittig/edimax-smartplug/blob/master/Downgrade.md) provided 
 as part of the project.
@@ -129,6 +133,6 @@ See [Release History](https://github.com/mwittig/edimax-smartplug/blob/master/HI
 
 ## License 
 
-Copyright (c) 2015-2018, Marcus Wittig and contributors. All rights reserved.
+Copyright (c) 2015-2019, Marcus Wittig and contributors. All rights reserved.
 
 [MIT License](https://github.com/mwittig/edimax-smartplug/blob/master/LICENSE)
